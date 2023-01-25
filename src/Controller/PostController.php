@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,22 +15,27 @@ class PostController extends AbstractController
 
     public function __construct(EntityManagerInterface $em)
     {
-        $this->en = $en;   
+        $this->em = $em;   
     }
 
-    #[Route('/', name: 'app_post')]
-    public function index(): Response
+    #[Route('/user/{id}', name: 'app_post')]
+    public function index($id): Response
     {
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($_REQUEST);
+        // $post = new User();
+        // $form = $this->createForm(PostType::class, $post);
+        // $form->handleRequest($_REQUEST);
+        $user = $this->em->getRepository(User::class)->find($id);
+        $user_find = $this->em->getRepository(User::class)->findUser($id);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $user = $this->en->getRepository(User::class)->find(1);
-        }
+
+
+        // if($form->isSubmitted() && $form->isValid()){
+        //     $user = $this->em->getRepository(User::class)->find(1);
+        // }
 
         return $this->render('post/index.html.twig', [
-            'controller_name' => 'PostController',
+            'user' => $user,
+            'findUser' => $user_find
         ]);
     }
 }

@@ -16,6 +16,13 @@ class Category
     #[ORM\Column(length: 30)]
     private ?string $nombre = null;
 
+    #[ORM\OneToOne(inversedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Tiempo $times = null;
+
+    #[ORM\OneToOne(mappedBy: 'category', cascade: ['persist', 'remove'])]
+    private ?Servicio $servicio = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +36,35 @@ class Category
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getTimes(): ?Tiempo
+    {
+        return $this->times;
+    }
+
+    public function setTimes(Tiempo $times): self
+    {
+        $this->times = $times;
+
+        return $this;
+    }
+
+    public function getServicio(): ?Servicio
+    {
+        return $this->servicio;
+    }
+
+    public function setServicio(Servicio $servicio): self
+    {
+        // set the owning side of the relation if necessary
+        if ($servicio->getCategory() !== $this) {
+            $servicio->setCategory($this);
+        }
+
+        $this->servicio = $servicio;
 
         return $this;
     }
