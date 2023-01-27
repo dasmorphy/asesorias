@@ -30,6 +30,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Servicio $servicio = null;
 
+    public function __construct($email = null, $password = null)
+    {
+        $this -> email = $email;
+        $this -> roles = (array([]));
+        $this -> password = $password;
+     
+    }
+
 
     public function getId(): ?int
     {
